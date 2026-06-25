@@ -1,0 +1,56 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: gopath-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - gopath-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: gopath-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - backend/.env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - gopath-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL:-http://localhost:5000/api}
+        - VITE_RAZORPAY_KEY_ID=${VITE_RAZORPAY_KEY_ID:-rzp_test_SfRbzM6Cie8HUC}
+    container_name: gopath-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - gopath-network
+
+volumes:
+  redis_data:
+
+networks:
+  gopath-network:
+    driver: bridge
