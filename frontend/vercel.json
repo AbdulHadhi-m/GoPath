@@ -4,5 +4,32 @@
       "source": "/((?!assets/.*|favicon.ico|robots.txt).*)",
       "destination": "/index.html"
     }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' https://checkout.razorpay.com https://lottie.host; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://go-path-ten.vercel.app https://checkout.razorpay.com; frame-src https://checkout.razorpay.com;"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
   ]
 }

@@ -20,29 +20,10 @@ import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 const app = express();
 
-const allowedOrigins = [
-  process.env.CLIENT_URL,
-  "https://go-path-c6g3nens5-abdul-hadhis-projects-b9229bac.vercel.app",
-  "http://localhost:5173",
-];
-
 app.use(cors({
-  origin: true,
+  origin: process.env.CLIENT_URL || "http://localhost:5173",
   credentials: true,
 }));
-
-// app.use(
-//   cors({
-//     origin: function (origin, callback) {
-//       if (!origin || allowedOrigins.includes(origin)) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error("Not allowed by CORS"));
-//       }
-//     },
-//     credentials: true,
-//   })
-// );
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

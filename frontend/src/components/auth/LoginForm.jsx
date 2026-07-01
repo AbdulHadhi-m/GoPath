@@ -117,16 +117,7 @@ export default function LoginForm() {
           {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password.message}</p>}
         </div>
 
-        <div className="flex justify-between text-sm">
-          <label className="flex gap-2">
-            <input type="checkbox" />
-            Remember me
-          </label>
-
-          <Link to="/forgot-password" className="text-red-700">
-            Forgot password?
-          </Link>
-        </div>
+        <div className="flex justify-end text-sm">
 
         <button
           disabled={loading}
