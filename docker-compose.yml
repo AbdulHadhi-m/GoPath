@@ -28,7 +28,7 @@ services:
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - CLIENT_URL=http://localhost:3000
+      - CLIENT_URL=https://go-path-ten.vercel.app
     depends_on:
       redis:
         condition: service_healthy

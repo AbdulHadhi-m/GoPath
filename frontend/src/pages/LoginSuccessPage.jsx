@@ -1,37 +1,21 @@
 import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setAuthUser, fetchCurrentUser } from "../features/auth/authSlice";
+import { fetchCurrentUser } from "../features/auth/authSlice";
 
 export default function LoginSuccessPage() {
-  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const token = params.get("token");
-    const email = params.get("email");
-    const firstName = params.get("firstName");
-    const lastName = params.get("lastName");
-
-    if (token) {
-      dispatch(
-        setAuthUser({
-          token,
-          email,
-          firstName,
-          lastName,
-        })
-      );
-      
-      dispatch(fetchCurrentUser()).finally(() => {
+    dispatch(fetchCurrentUser()).then((result) => {
+      if (result.meta.requestStatus === "fulfilled") {
         navigate("/", { replace: true });
-      });
-    } else {
-      navigate("/login", { replace: true });
-    }
-  }, [location, navigate, dispatch]);
+      } else {
+        navigate("/login", { replace: true });
+      }
+    });
+  }, [navigate, dispatch]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50">

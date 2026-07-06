@@ -117,8 +117,6 @@ export default function LoginForm() {
           {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password.message}</p>}
         </div>
 
-        <div className="flex justify-end text-sm">
-
         <button
           disabled={loading}
           className="w-full rounded-2xl bg-red-700 py-3 text-white hover:bg-red-800 disabled:opacity-60"

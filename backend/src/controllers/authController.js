@@ -21,7 +21,7 @@ const setTokenCookie = (res, token) => {
   res.cookie("token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 };
@@ -154,6 +154,8 @@ export const loginUser = asyncHandler(async (req, res) => {
 export const logoutUser = asyncHandler(async (req, res) => {
   res.cookie("token", "", {
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     expires: new Date(0),
   });
 
@@ -167,7 +169,7 @@ export const logoutUser = asyncHandler(async (req, res) => {
 export const getMe = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
-    user: req.user,
+    user: { ...req.user.toObject(), token: req.token },
   });
 });
 
@@ -178,11 +180,7 @@ export const googleAuthSuccess = asyncHandler(async (req, res) => {
 
   const frontendUrl = process.env.CLIENT_URL || "http://localhost:5173";
 
-  res.redirect(
-    `${frontendUrl}/login-success?token=${token}&email=${encodeURIComponent(
-      req.user.email
-    )}&firstName=${encodeURIComponent(req.user.firstName || "")}&lastName=${encodeURIComponent(req.user.lastName || "")}`
-  );
+  res.redirect(`${frontendUrl}/login-success`);
 });
 
 
